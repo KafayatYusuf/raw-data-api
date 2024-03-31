@@ -244,7 +244,7 @@ def process_raw_data(self, params, user=None):
             )
         else:
             # give the static file download url back to user served from fastapi static export path
-            downloadUurl = str(upload_file_path)
+            downloadUrl = str(upload_file_path)
 
         # getting file size of zip , units are in bytes converted to mb in response
         zip_file_size = os.path.getsize(upload_file_path)
