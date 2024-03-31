@@ -1308,24 +1308,52 @@
                         "type": "string"
                     },
                     "result": {
-                        "$ref": "#/components/schemas/SnapshotTaskResult"
-                    }
-                },
+                        "type": "object",
+        "properties": {
+          "downloadUrl": {
+            "type": "string",
+            "description": "The URL to download the result"
+          },
+          "binded_file_size": {
+            "type": "string",
+            "description": "The size of the binded file"
+          },
+          "file_name": {
+            "type": "string",
+            "description": "The name of the file"
+          },
+          "query_area": {
+            "type": "string",
+            "description": "The query area"
+          },
+          "response_time": {
+            "type": "string",
+            "description": "The response time"
+          },
+          "zip_file_size_bytes": {
+            "type": "integer",
+            "description": "The size of the ZIP file in bytes"
+          }
+        },
+        "required": ["downloadUrl"]
+      }
+    }
+  }
+}
+},
                 "additionalProperties": false,
                 "example": {
-                    "downloadUrl": "https://s3.us-east-1.amazonaws.com/exports-stage.hotosm.org/Raw_Export_3fded368-456f-4ef4-a1b8-c099a7f77ca4_GeoJSON.zip",
                     "id": "3fded368-456f-4ef4-a1b8-c099a7f77ca4",
                     "result": {
                         "downloadUrl": "https://s3.us-east-1.amazonaws.com/exports-stage.hotosm.org/Raw_Export_3fded368-456f-4ef4-a1b8-c099a7f77ca4_GeoJSON.zip", 
-                        "bindedFileSize": "7 MB",
-                        "fileName": "Raw_Export_3fded368-456f-4ef4-a1b8-c099a7f77ca4_GeoJSON", 
-                        "queryArea": "6 Sq Km ",
-                        "responseTime": "0:00:12.175976",
-                        "zipFileSizeBytes": 1331601
+                        "binded_file_size": "7 MB",
+                        "file_name": "Raw_Export_3fded368-456f-4ef4-a1b8-c099a7f77ca4_GeoJSON", 
+                        "query_area": "6 Sq Km ",
+                        "response_time": "0:00:12.175976",
+                        "zip_file_size_bytes": 1331601
                      },
                     "status": "SUCCESS"
-                }
-            },
+                },
             "SnapshotTaskResult": {
                 "title": "SnapshotTaskResult",
                 "required": [
@@ -1336,33 +1364,6 @@
                     "bindedFileSize",
                     "zipFileSizeBytes"
                 ],
-                "type": "object",
-                "properties": {
-                    "downloadUrl": {
-                        "title": "downloadUrl",
-                        "type": "string"
-                    },
-                    "fileName": {
-                        "title": "Filename",
-                        "type": "string"
-                    },
-                    "responseTime": {
-                        "title": "Responsetime",
-                        "type": "string"
-                    },
-                    "queryArea": {
-                        "title": "Queryarea",
-                        "type": "string"
-                    },
-                    "bindedFileSize": {
-                        "title": "Bindedfilesize",
-                        "type": "string"
-                    },
-                    "zipFileSizeBytes": {
-                        "title": "Zipfilesizebytes",
-                        "type": "integer"
-                    }
-                },
                 "additionalProperties": false
             },
             "StatusResponse": {
