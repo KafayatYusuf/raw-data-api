@@ -1335,7 +1335,7 @@
             "description": "The size of the ZIP file in bytes"
           }
         },
-        "required": ["downloadUrl"]
+        "required": ["downloadUrl","binded_file_size","file_name","query_area","response_time","zip_file_size_bytes"]
       }
     }
   }
