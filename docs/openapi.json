@@ -7,7 +7,12 @@
     "tags": [ 
     {
       "name": "users",
-      "description": "Operations related to users"
+      "description": "Operations related to users",
+      "items": {
+        "type": "string"
+      },
+    
+    "minItems": 1
     }
   ],
     "paths": {
