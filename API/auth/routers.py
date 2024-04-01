@@ -18,31 +18,31 @@ class ErrorMessage(BaseModel):
 
 responses = {
     200: {
-        "model": ErrorMessage,
-        "content": {"application/json": {"example": {"detail": "Successful Response"}}},
+        "description": "Successful Response",
+        "content": {"application/json": {"example": {"detail": "Successful"}}},
     },
     400: {
-        "model": ErrorMessage,
+        "description": "Bad Request",
         "content": {"application/json": {"example": {"detail": "Bad Request"}}},
     },
     401: {
-        "model": ErrorMessage,
+        "description": "Unauthorized",
         "content": {"application/json": {"example": {"detail": "Unauthorized"}}},
     },
     403: {
-        "model": ErrorMessage,
+        "description": "Forbidden",
         "content": {"application/json": {"example": {"detail": "Forbidden"}}},
     },
     408: {
-        "model": ErrorMessage,
+        "description": "Request Timeout",
         "content": {"application/json": {"example": {"detail": "Request Timeout"}}},
     },
     422: {
-        "model": ErrorMessage,
+        "description": "Validation Error",
         "content": {"application/json": {"example": {"detail": "Validation Error"}}},
     },
     500: {
-        "model": ErrorMessage,
+        "description": "Internal Server Error",
         "content": {
             "application/json": {"example": {"detail": "Internal Server Error"}}
         },
