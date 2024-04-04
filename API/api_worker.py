@@ -237,14 +237,14 @@ def process_raw_data(self, params, user=None):
                         if iso3countrycode:
                             upload_name = f"HDX/{iso3countrycode.upper()}/{exportname}"
 
-            download_url = file_transfer_obj.upload(
+            downloadUrl = file_transfer_obj.upload(
                 upload_file_path,
                 upload_name,
                 file_suffix="zip" if bind_zip else params.output_type.lower(),
             )
         else:
             # give the static file download url back to user served from fastapi static export path
-            download_url = str(upload_file_path)
+            downloadUrl = str(upload_file_path)
 
         # getting file size of zip , units are in bytes converted to mb in response
         zip_file_size = os.path.getsize(upload_file_path)
@@ -258,7 +258,7 @@ def process_raw_data(self, params, user=None):
             f"Done Export : {exportname} of {round(inside_file_size/1000000)} MB / {geom_area} sqkm in {response_time_str}"
         )
         final_response = {
-            "download_url": download_url,
+            "downloadUrl": downloadUrl,
             "file_name": params.file_name,
             "process_time": response_time_str,
             "query_area": f"{round(geom_area,2)} Sq Km",

@@ -4,11 +4,17 @@
         "title": "Raw Data API ",
         "version": "1"
     },
-    "servers": [
-        {
-            "url": "/latest"
-        }
-    ],
+    "tags": [ 
+    {
+      "name": "users",
+      "description": "Operations related to users",
+      "items": {
+        "type": "string"
+      },
+    
+    "minItems": 1
+    }
+  ],
     "paths": {
         "/status/": {
             "get": {
@@ -550,7 +556,7 @@
             "post": {
                 "summary": "Get Current Snapshot As Plain Geojson",
                 "description": "Simple API to get osm features as geojson for small region. This is designed only for querying small data for large data follow /snapshot/\n\nParams ::\n\n    bbox: Optional List = takes xmin, ymin, xmax, ymax uses srid=4326\n    select: List = this is select query  you can pass [*] to select all attribute\n    where: List[WhereCondition] = [{'key': 'building', 'value': ['*']},{'key':'amenity','value':['school','college']}]\n    join_by: Optional[JoinFilterType] = or/ and\n    look_in: Optional[List[OsmFeatureType]] = [\"nodes\", \"ways_poly\",\"ways_line\",\"relations\"] : tables name",
-                "operationId": "get_current_snapshot_as_plain_geojson_snapshot_plain__post",
+                "operationId": "get_current_snapshot_as_plain_geojson_snapshot",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -1285,8 +1291,8 @@
                 },
                 "additionalProperties": false,
                 "example": {
-                    "task_id": "aa539af6-83d4-4aa3-879e-abf14fffa03f",
-                    "track_link": "/tasks/status/aa539af6-83d4-4aa3-879e-abf14fffa03f/"
+                    "taskId": "aa539af6-83d4-4aa3-879e-abf14fffa03f",
+                    "trackLink": "/tasks/status/aa539af6-83d4-4aa3-879e-abf14fffa03f/"
                 }
             },
             "SnapshotTaskResponse": {
@@ -1307,23 +1313,52 @@
                         "type": "string"
                     },
                     "result": {
-                        "$ref": "#/components/schemas/SnapshotTaskResult"
-                    }
-                },
+                        "type": "object",
+        "properties": {
+          "downloadUrl": {
+            "type": "string",
+            "description": "The URL to download the result"
+          },
+          "binded_file_size": {
+            "type": "string",
+            "description": "The size of the binded file"
+          },
+          "file_name": {
+            "type": "string",
+            "description": "The name of the file"
+          },
+          "query_area": {
+            "type": "string",
+            "description": "The query area"
+          },
+          "response_time": {
+            "type": "string",
+            "description": "The response time"
+          },
+          "zip_file_size_bytes": {
+            "type": "integer",
+            "description": "The size of the ZIP file in bytes"
+          }
+        },
+        "required": ["downloadUrl","binded_file_size","file_name","query_area","response_time","zip_file_size_bytes"]
+      }
+    }
+  }
+}
+},
                 "additionalProperties": false,
                 "example": {
                     "id": "3fded368-456f-4ef4-a1b8-c099a7f77ca4",
-                    "status": "SUCCESS",
                     "result": {
-                        "download_url": "https://s3.us-east-1.amazonaws.com/exports-stage.hotosm.org/Raw_Export_3fded368-456f-4ef4-a1b8-c099a7f77ca4_GeoJSON.zip",
-                        "file_name": "Raw_Export_3fded368-456f-4ef4-a1b8-c099a7f77ca4_GeoJSON",
-                        "response_time": "0:00:12.175976",
-                        "query_area": "6 Sq Km ",
+                        "downloadUrl": "https://s3.us-east-1.amazonaws.com/exports-stage.hotosm.org/Raw_Export_3fded368-456f-4ef4-a1b8-c099a7f77ca4_GeoJSON.zip", 
                         "binded_file_size": "7 MB",
+                        "file_name": "Raw_Export_3fded368-456f-4ef4-a1b8-c099a7f77ca4_GeoJSON", 
+                        "query_area": "6 Sq Km ",
+                        "response_time": "0:00:12.175976",
                         "zip_file_size_bytes": 1331601
-                    }
-                }
-            },
+                     },
+                    "status": "SUCCESS"
+                },
             "SnapshotTaskResult": {
                 "title": "SnapshotTaskResult",
                 "required": [
@@ -1334,33 +1369,6 @@
                     "bindedFileSize",
                     "zipFileSizeBytes"
                 ],
-                "type": "object",
-                "properties": {
-                    "downloadUrl": {
-                        "title": "Downloadurl",
-                        "type": "string"
-                    },
-                    "fileName": {
-                        "title": "Filename",
-                        "type": "string"
-                    },
-                    "responseTime": {
-                        "title": "Responsetime",
-                        "type": "string"
-                    },
-                    "queryArea": {
-                        "title": "Queryarea",
-                        "type": "string"
-                    },
-                    "bindedFileSize": {
-                        "title": "Bindedfilesize",
-                        "type": "string"
-                    },
-                    "zipFileSizeBytes": {
-                        "title": "Zipfilesizebytes",
-                        "type": "integer"
-                    }
-                },
                 "additionalProperties": false
             },
             "StatusResponse": {
@@ -1486,5 +1494,3 @@
                 "additionalProperties": false
             }
         }
-    }
-}
