@@ -2,11 +2,14 @@ from enum import Enum
 from typing import Union
 
 from fastapi import Depends, Header, HTTPException
+from fastapi.security import APIKeyHeader
 from osm_login_python.core import Auth
 from pydantic import BaseModel, Field
 
 from src.app import Users
 from src.config import get_oauth_credentials
+
+API_access_token = APIKeyHeader(name="access_token", description="user_authentication")
 
 
 class UserRole(Enum):
@@ -43,8 +46,13 @@ def get_osm_auth_user(access_token):
     return user
 
 
-def login_required(access_token: str = Header(...)):
-    return get_osm_auth_user(access_token)
+def login_required(access_token: str = Depends(API_access_token)):
+
+    if access_token != "my_token":
+        raise HTTPException(status_code=401, detail="Invalid API Key")
+
+
+return get_osm_auth_user(access_token)
 
 
 def get_optional_user(access_token: str = Header(default=None)) -> AuthUser:
