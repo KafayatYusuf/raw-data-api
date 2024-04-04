@@ -11,6 +11,44 @@ from . import AuthUser, admin_required, login_required, osm_auth, staff_required
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
+class ErrorMessage(BaseModel):
+    detail: str
+
+
+responses = {
+    200: {
+        "description": "Successful Response",
+        "content": {"application/json": {"example": {"detail": "Successful"}}},
+    },
+    400: {
+        "description": "Bad Request",
+        "content": {"application/json": {"example": {"detail": "Bad Request"}}},
+    },
+    401: {
+        "description": "Unauthorized",
+        "content": {"application/json": {"example": {"detail": "Unauthorized"}}},
+    },
+    403: {
+        "description": "Forbidden",
+        "content": {"application/json": {"example": {"detail": "Forbidden"}}},
+    },
+    408: {
+        "description": "Request Timeout",
+        "content": {"application/json": {"example": {"detail": "Request Timeout"}}},
+    },
+    422: {
+        "description": "Validation Error",
+        "content": {"application/json": {"example": {"detail": "Validation Error"}}},
+    },
+    500: {
+        "description": "Internal Server Error",
+        "content": {
+            "application/json": {"example": {"detail": "Internal Server Error"}}
+        },
+    },
+}
+
+
 @router.get("/login")
 def login_url(request: Request):
     """Generate Login URL for authentication using OAuth2 Application registered with OpenStreetMap.
