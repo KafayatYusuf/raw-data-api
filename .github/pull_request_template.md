@@ -31,7 +31,7 @@ Please provide screenshots of the change.
 
 ## Checklists:
 
-Checklist before requesting review : 
+Checklist before requesting review: 
 
 - 📖 Read the HOT Code of Conduct: <https://docs.hotosm.org/code-of-conduct>
 - 👷‍♀️ Create small PRs. In most cases, this will be possible.
