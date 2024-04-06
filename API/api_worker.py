@@ -62,6 +62,16 @@ if WORKER_PREFETCH_MULTIPLIER:
 
 
 def create_readme_content(default_readme, polygon_stats):
+    """
+    Create content for the README file.
+
+    Args:
+        default_readme (str): The content of the default README file.
+        polygon_stats (dict): Statistics about polygons.
+
+    Returns:
+        str: The content for the README file.
+    """
     utc_now = dt.now(timezone.utc)
     utc_offset = utc_now.strftime("%z")
     readme_content = f"Exported Timestamp (UTC{utc_offset}): {dt.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')}\n"
@@ -76,6 +86,19 @@ def create_readme_content(default_readme, polygon_stats):
 def zip_binding(
     working_dir, exportname_parts, geom_dump, polygon_stats, default_readme
 ):
+    """
+    Create a ZIP archive with specified files and content
+
+    Args:
+        working_dir (str): The working directory where the archive will be created
+        exportname_parts (list): Parts of the export name
+        geom_dump (str): The path to the GeoJSON file containing geometry information
+        polygon_stats (dict): Statistics about polygons
+        default_readme (str): The content of the default README file
+
+    Returns:
+        dict: A dictionary containing additional files for the ZIP archive
+    """
     logging.debug("Zip Binding Started!")
     upload_file_path = os.path.join(
         working_dir, os.pardir, f"{exportname_parts[-1]}.zip"
@@ -143,6 +166,16 @@ def zip_binding(
     soft_time_limit=DEFAULT_SOFT_TASK_LIMIT,
 )
 def process_raw_data(self, params, user=None):
+    """
+    Process raw data based on provided parameters
+
+    Args:
+        params (dict): Parameters for processing raw data
+        user (str, optional): User information. Defaults to None
+
+    Raises:
+        ValueError: If retry limit is reached
+    """
     if self.request.retries > 0:
         raise ValueError("Retry limit reached. Marking task as failed.")
     params = RawDataCurrentParams(**params)
@@ -258,7 +291,7 @@ def process_raw_data(self, params, user=None):
             f"Done Export : {exportname} of {round(inside_file_size/1000000)} MB / {geom_area} sqkm in {response_time_str}"
         )
         final_response = {
-            "download_url": download_url,
+            "downloadUrl": downloadUrl,
             "file_name": params.file_name,
             "process_time": response_time_str,
             "query_area": f"{round(geom_area,2)} Sq Km",
@@ -280,6 +313,16 @@ def process_raw_data(self, params, user=None):
     soft_time_limit=HDX_SOFT_TASK_LIMIT,
 )
 def process_custom_request(self, params, user=None):
+    """
+    Process custom request based on provided parameters
+
+    Args:
+        params (dict): Parameters for processing the custom request
+        user (str, optional): User information. Defaults to None
+
+    Raises:
+        ValueError: If retry limit is reached
+    """
     if self.request.retries > 0:
         raise ValueError("Retry limit reached. Marking task as failed.")
     params = DynamicCategoriesModel(**params)
