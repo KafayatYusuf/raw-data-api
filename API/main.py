@@ -24,6 +24,12 @@ welcome_msg = (
 Your one-stop API which is a set of high-performant APIs (Application Programming Interfaces) for transforming and exporting OpenStreetMap (OSM) data in different GIS file formats."""
 
 
+class ConsoleColors:
+    BOLD = "\033[1m"
+    RESET = "\033[0m"
+    GREEN = "\033[92m"
+
+
 import time
 import psycopg2
 from fastapi import FastAPI
