@@ -189,7 +189,7 @@ PGPORT=5432
 
 ### Setup Oauth for Authentication
 
-Login to [OSM](https://www.openstreetmap.org/) , Click on My Settings and register your local galaxy app to Oauth2applications
+Login to [OSM](https://www.openstreetmap.org/) , click on My Settings and register your local galaxy app to Oauth2applications
 
 ![image](https://user-images.githubusercontent.com/36752999/188452619-aababf28-b685-4141-b381-9c25d0367b57.png)
 
