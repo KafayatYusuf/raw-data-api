@@ -10,12 +10,25 @@ from src.config import RATE_LIMIT_PER_MIN
 from .auth import AuthUser, admin_required, staff_required
 
 # from src.validation.models import DynamicCategoriesModel
+from src.validation.models import ErrorMessage, common_responses
 
 
 router = APIRouter(prefix="/hdx", tags=["HDX"])
 
 
-@router.post("/", response_model=dict)
+@router.post(
+    "/",
+    response_model=dict,
+    status_code=200,
+    responses={
+        200: {
+            "description": "Successful response",
+            "content": {
+                "application/json": {"example": {"id": 1, "name": "example_hdx"}}
+            },
+        }
+    },
+)
 @limiter.limit(f"{RATE_LIMIT_PER_MIN}/minute")
 @version(1)
 async def create_hdx(
@@ -36,7 +49,20 @@ async def create_hdx(
     return hdx_instance.create_hdx(hdx_data)
 
 
-@router.get("/", response_model=List[dict])
+@router.get(
+    "/",
+    response_model=List[dict],
+    responses={
+        200: {
+            "description": "Successful response",
+            "content": {
+                "application/json": {"example": [{"id": 1, "name": "example_hdx"}]}
+            },
+        },
+        422: {"description": "Unprocessable Entity"},
+        500: {"description": "Internal Server Error"},
+    },
+)
 @limiter.limit(f"{RATE_LIMIT_PER_MIN}/minute")
 @version(1)
 async def read_hdx_list(
@@ -70,7 +96,24 @@ async def read_hdx_list(
     return hdx_list
 
 
-@router.get("/search/", response_model=List[dict])
+@router.get(
+    "/search/",
+    response_model=List[dict],
+    responses={
+        404: {
+            "description": "Not found",
+            "content": {
+                "application/json": {"example": {"detail": "Dataset not found"}}
+            },
+        },
+        500: {
+            "description": "Internal Server Error",
+            "content": {
+                "application/json": {"example": {"detail": "Internal Server Error"}}
+            },
+        },
+    },
+)
 @limiter.limit(f"{RATE_LIMIT_PER_MIN}/minute")
 @version(1)
 async def search_hdx(
@@ -98,7 +141,24 @@ async def search_hdx(
     return hdx_list
 
 
-@router.get("/{hdx_id}", response_model=dict)
+@router.get(
+    "/{hdx_id}",
+    response_model=dict,
+    responses={
+        404: {
+            "description": "Not found",
+            "content": {
+                "application/json": {"example": {"detail": "Dataset not found"}}
+            },
+        },
+        500: {
+            "description": "Internal Server Error",
+            "content": {
+                "application/json": {"example": {"detail": "Internal Server Error"}}
+            },
+        },
+    },
+)
 @limiter.limit(f"{RATE_LIMIT_PER_MIN}/minute")
 @version(1)
 async def read_hdx(request: Request, hdx_id: int):
@@ -113,7 +173,7 @@ async def read_hdx(request: Request, hdx_id: int):
         dict: Details of the requested HDX entry.
 
     Raises:
-        HTTPException: If the HDX entry is not found.
+        HTTPException 404: If the HDX entry is not found.
     """
     hdx_instance = HDX()
     hdx = hdx_instance.get_hdx_by_id(hdx_id)
@@ -122,7 +182,18 @@ async def read_hdx(request: Request, hdx_id: int):
     raise HTTPException(status_code=404, detail="HDX not found")
 
 
-@router.put("/{hdx_id}", response_model=dict)
+@router.put(
+    "/{hdx_id}",
+    response_model=dict,
+    responses={
+        404: {
+            "description": "Not found",
+            "content": {
+                "application/json": {"example": {"message": "Dataset not found"}}
+            },
+        },
+    },
+)
 @limiter.limit(f"{RATE_LIMIT_PER_MIN}/minute")
 @version(1)
 async def update_hdx(
@@ -154,7 +225,18 @@ async def update_hdx(
     return hdx_instance_update.update_hdx(hdx_id, hdx_data)
 
 
-@router.patch("/{hdx_id}", response_model=Dict)
+@router.patch(
+    "/{hdx_id}",
+    response_model=Dict,
+    responses={
+        404: {
+            "description": "Not found",
+            "content": {
+                "application/json": {"example": {"message": "Dataset not found"}}
+            },
+        },
+    },
+)
 @limiter.limit(f"{RATE_LIMIT_PER_MIN}/minute")
 @version(1)
 async def patch_hdx(
@@ -186,7 +268,18 @@ async def patch_hdx(
     return patch_instance.patch_hdx(hdx_id, hdx_data)
 
 
-@router.delete("/{hdx_id}", response_model=dict)
+@router.delete(
+    "/{hdx_id}",
+    response_model=dict,
+    responses={
+        404: {
+            "description": "Not found",
+            "content": {
+                "application/json": {"example": {"message": "Dataset not found"}}
+            },
+        },
+    },
+)
 @limiter.limit(f"{RATE_LIMIT_PER_MIN}/minute")
 @version(1)
 async def delete_hdx(
@@ -204,7 +297,7 @@ async def delete_hdx(
         dict: Result of the HDX deletion process.
 
     Raises:
-        HTTPException: If the HDX entry is not found.
+        HTTPException 404: If the HDX entry is not found.
     """
     hdx_instance = HDX()
     existing_hdx = hdx_instance.get_hdx_by_id(hdx_id)
