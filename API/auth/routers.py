@@ -125,7 +125,7 @@ async def create_user(params: User, user_data: AuthUser = Depends(admin_required
     - Dict[str, Any]: A dictionary containing the osm_id of the newly created user.
 
     Raises:
-    - HTTPException: If the user creation fails.
+    - HTTPException 400: If the user creation fails.
     """
     auth = Users()
     return auth.create_user(params.osm_id, params.role)
@@ -148,7 +148,7 @@ async def read_user(osm_id: int, user_data: AuthUser = Depends(staff_required)):
     - Dict[str, Any]: A dictionary containing user information.
 
     Raises:
-    - HTTPException: If the user with the given osm_id is not found.
+    - HTTPException 404: If the user with the given osm_id is not found.
     """
     auth = Users()
 
@@ -178,7 +178,7 @@ async def update_user(
     - Dict[str, Any]: A dictionary containing the updated user information.
 
     Raises:
-    - HTTPException: If the user with the given osm_id is not found.
+    - HTTPException 404: If the user with the given osm_id is not found.
     """
     auth = Users()
     return auth.update_user(osm_id, update_data)
@@ -201,7 +201,7 @@ async def delete_user(osm_id: int, user_data: AuthUser = Depends(admin_required)
     - Dict[str, Any]: A dictionary containing the deleted user information.
 
     Raises:
-    - HTTPException: If the user with the given osm_id is not found.
+    - HTTPException 404: If the user with the given osm_id is not found.
     """
     auth = Users()
     return auth.delete_user(osm_id)
