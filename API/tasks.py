@@ -19,7 +19,14 @@ from .auth import AuthUser, admin_required, login_required, staff_required
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
 
-@router.get("/status/{task_id}", response_model=SnapshotTaskResponse)
+@router.get(
+    "/status/{task_id}",
+    response_model=SnapshotTaskResponse,
+    responses={
+        200: {"description": "Successful response", "model": SnapshotTaskResponse},
+        404: {"description": "Task not found"},
+    },
+)
 @version(1)
 def get_task_status(
     task_id,
@@ -81,7 +88,14 @@ def get_task_status(
     return JSONResponse(result)
 
 
-@router.get("/revoke/{task_id}")
+@router.get(
+    "/revoke/{task_id}",
+    responses={
+        200: {"description": "Task successfully revoked"},
+        404: {"description": "Task not found"},
+        500: {"description": "Internal Server Error"},
+    },
+)
 @version(1)
 def revoke_task(task_id, user: AuthUser = Depends(staff_required)):
     """Revokes task , Terminates if it is executing
@@ -96,7 +110,13 @@ def revoke_task(task_id, user: AuthUser = Depends(staff_required)):
     return JSONResponse({"id": task_id})
 
 
-@router.get("/inspect")
+@router.get(
+    "/inspect",
+    responses={
+        200: {"description": "Successful"},
+        500: {"description": "Internal Server Error"},
+    },
+)
 @version(1)
 def inspect_workers(
     request: Request,
@@ -137,7 +157,13 @@ def inspect_workers(
     return JSONResponse(content=response_data)
 
 
-@router.get("/ping")
+@router.get(
+    "/ping",
+    responses={
+        200: {"description": "Successful"},
+        500: {"description": "Internal Server Error"},
+    },
+)
 @version(1)
 def ping_workers():
     """Pings available workers
@@ -148,7 +174,14 @@ def ping_workers():
     return JSONResponse(inspected_ping)
 
 
-@router.get("/purge")
+@router.get(
+    "/purge",
+    responses={
+        200: {"description": "Successful"},
+        403: {"description": "Insufficient Permission"},
+        500: {"description": "Internal Server Error"},
+    },
+)
 @version(1)
 def discard_all_waiting_tasks(user: AuthUser = Depends(admin_required)):
     """
@@ -162,7 +195,23 @@ def discard_all_waiting_tasks(user: AuthUser = Depends(admin_required)):
 queues = [DEFAULT_QUEUE_NAME, ONDEMAND_QUEUE_NAME]
 
 
-@router.get("/queue")
+@router.get(
+    "/queue",
+    responses={
+        200: {
+            "description": "Successful",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "queue_name_1": {"length": 10},
+                    }
+                }
+            },
+        },
+        404: {"description": "Queue cannot be found"},
+        500: {"description": "Internal Server Error"},
+    },
+)
 @version(1)
 def get_queue_info():
     """Retrieve information about the queue
@@ -183,7 +232,22 @@ def get_queue_info():
     return JSONResponse(content=queue_info)
 
 
-@router.get("/queue/details/{queue_name}")
+@router.get(
+    "/queue/details/{queue_name}",
+    responses={
+        200: {
+            "description": "Successful response",
+            "content": {
+                "application/json": {
+                    "example": [
+                        {"index": 7, "id": 123, "args": "argument1"},
+                    ]
+                }
+            },
+        },
+        404: {"description": "Queue cannot be found"},
+    },
+)
 @version(1)
 def get_list_details(
     queue_name: str,
@@ -202,7 +266,9 @@ def get_list_details(
         Details of items in the queue
 
     Raises:
-        HTTPException 404: If the specified queue is not found
+    - HTTPException 404: If the specified queue is not found
+
+
     """
     if queue_name not in queues:
         raise HTTPException(status_code=404, detail=f"Queue '{queue_name}' not found")
