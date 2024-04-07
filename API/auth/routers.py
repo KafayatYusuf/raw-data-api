@@ -4,58 +4,13 @@ from fastapi import APIRouter, Depends, Request
 from pydantic import BaseModel
 
 from src.app import Users
-from src.error_module import ErrorMessage, common_responses, login_responses
 
 from . import AuthUser, admin_required, login_required, osm_auth, staff_required
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
-class ErrorMessage(BaseModel):
-    detail: str
-
-
-responses = {
-    200: {
-        "description": "Successful Response",
-        "content": {"application/json": {"example": {"detail": "Successful"}}},
-    },
-    400: {
-        "description": "Bad Request",
-        "content": {"application/json": {"example": {"detail": "Bad Request"}}},
-    },
-    401: {
-        "description": "Unauthorized",
-        "content": {"application/json": {"example": {"detail": "Unauthorized"}}},
-    },
-    403: {
-        "description": "Forbidden",
-        "content": {"application/json": {"example": {"detail": "Forbidden"}}},
-    },
-    408: {
-        "description": "Request Timeout",
-        "content": {"application/json": {"example": {"detail": "Request Timeout"}}},
-    },
-    422: {
-        "description": "Validation Error",
-        "content": {"application/json": {"example": {"detail": "Validation Error"}}},
-    },
-    500: {
-        "description": "Internal Server Error",
-        "content": {
-            "application/json": {"example": {"detail": "Internal Server Error"}}
-        },
-    },
-}
-
-
-@router.get(
-    "/login",
-    responses={
-        500: {"model": ErrorMessage},
-        200: {"content": {"application/json": {"example": {"loginUrl": "Successful"}}}},
-    },
-)
+@router.get("/login")
 def login_url(request: Request):
     """Generate Login URL for authentication using OAuth2 Application registered with OpenStreetMap.
     Click on the download url returned to get access_token.
@@ -70,7 +25,7 @@ def login_url(request: Request):
     return login_url
 
 
-@router.get("/callback", responses={500: {"model": ErrorMessage}})
+@router.get("/callback")
 def callback(request: Request):
     """Performs token exchange between OpenStreetMap and Raw Data API
 
@@ -87,7 +42,7 @@ def callback(request: Request):
     return access_token
 
 
-@router.get("/me", response_model=AuthUser, responses={**responses})
+@router.get("/me", response_model=AuthUser)
 def my_data(user_data: AuthUser = Depends(login_required)):
     """Read the access token and provide  user details from OSM user's API endpoint,
     also integrated with underpass .
@@ -109,7 +64,7 @@ class User(BaseModel):
 
 
 # Create user
-@router.post("/users", response_model=dict, responses={**responses})
+@router.post("/users", response_model=dict)
 async def create_user(params: User, user_data: AuthUser = Depends(admin_required)):
     """
     Creates a new user and returns the user's information.
@@ -132,7 +87,7 @@ async def create_user(params: User, user_data: AuthUser = Depends(admin_required
 
 
 # Read user by osm_id
-@router.get("/users{osm_id}", response_model=dict, responses={**responses})
+@router.get("/users/{osm_id}", response_model=dict)
 async def read_user(osm_id: int, user_data: AuthUser = Depends(staff_required)):
     """
     Retrieves user information based on the given osm_id.
@@ -148,7 +103,7 @@ async def read_user(osm_id: int, user_data: AuthUser = Depends(staff_required)):
     - Dict[str, Any]: A dictionary containing user information.
 
     Raises:
-    - HTTPException 403: If the user with the given osm_id is not found.
+    - HTTPException: If the user with the given osm_id is not found.
     """
     auth = Users()
 
@@ -156,11 +111,7 @@ async def read_user(osm_id: int, user_data: AuthUser = Depends(staff_required)):
 
 
 # Update user by osm_id
-@router.put(
-    "/users{osm_id}",
-    response_model=dict,
-    responses={**responses, 403: {"model": ErrorMessage}},
-)
+@router.put("/users/{osm_id}", response_model=dict)
 async def update_user(
     osm_id: int, update_data: User, user_data: AuthUser = Depends(admin_required)
 ):
@@ -185,11 +136,7 @@ async def update_user(
 
 
 # Delete user by osm_id
-@router.delete(
-    "/users{osm_id}",
-    response_model=dict,
-    responses={**responses, 404: {"model": ErrorMessage}},
-)
+@router.delete("/users/{osm_id}", response_model=dict)
 async def delete_user(osm_id: int, user_data: AuthUser = Depends(admin_required)):
     """
     Deletes a user based on the given osm_id.
@@ -208,7 +155,7 @@ async def delete_user(osm_id: int, user_data: AuthUser = Depends(admin_required)
 
 
 # Get all users
-@router.get("/users", response_model=list, responses={**responses})
+@router.get("/users", response_model=list)
 async def read_users(
     skip: int = 0, limit: int = 10, user_data: AuthUser = Depends(staff_required)
 ):
