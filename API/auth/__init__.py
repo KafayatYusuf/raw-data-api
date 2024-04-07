@@ -13,12 +13,16 @@ API_access_token = APIKeyHeader(name="access_token", description="user_authentic
 
 
 class UserRole(Enum):
+    """Assigning user roles as integer"""
+
     ADMIN = 1
     STAFF = 2
     GUEST = 3
 
 
 class AuthUser(BaseModel):
+    """Defining fields as attributes"""
+
     id: int
     username: str
     img_url: Union[str, None]
@@ -29,12 +33,24 @@ osm_auth = Auth(*get_oauth_credentials())
 
 
 def get_user_from_db(osm_id: int):
+    """Get user's information (osm_id)"""
     auth = Users()
     user = auth.read_user(osm_id)
     return user
 
 
 def get_osm_auth_user(access_token):
+    """
+    Get the authenticated user from OpenStreetMap (OSM) using the provided access token.
+
+    Args:
+        access_token (str): The access token obtained from OSM.
+
+    Returns:
+        AuthUser: An AuthUser object representing the authenticated user.
+
+
+    """
     try:
         user = AuthUser(**osm_auth.deserialize_access_token(access_token))
     except Exception as ex:
@@ -47,12 +63,24 @@ def get_osm_auth_user(access_token):
 
 
 def login_required(access_token: str = Depends(API_access_token)):
+    """Get user's login details"""
     if access_token != "my_token":
         raise HTTPException(status_code=401, detail="Invalid API Key")
     return get_osm_auth_user(access_token)
 
 
 def get_optional_user(access_token: str = Header(default=None)) -> AuthUser:
+    """
+    Get the user's access token, which is optional
+
+    Args:
+        access_token (str, optional): The access token obtained from the request header
+
+    Returns:
+        AuthUser: An AuthUser object representing the authenticated user if an access token is provided,
+        otherwise, return a guest user with limited options.
+
+    """
     if access_token:
         return get_osm_auth_user(access_token)
     else:
@@ -61,6 +89,7 @@ def get_optional_user(access_token: str = Header(default=None)) -> AuthUser:
 
 
 def admin_required(user: AuthUser = Depends(login_required)):
+    """Get admin login details"""
     db_user = get_user_from_db(user.id)
     if not db_user["role"] is UserRole.ADMIN.value:
         raise HTTPException(status_code=403, detail="User is not an admin")
@@ -68,6 +97,7 @@ def admin_required(user: AuthUser = Depends(login_required)):
 
 
 def staff_required(user: AuthUser = Depends(login_required)):
+    """Get staff login details"""
     db_user = get_user_from_db(user.id)
 
     # admin is staff too
