@@ -11,7 +11,18 @@ from src.validation.models import StatsRequestParams
 router = APIRouter(prefix="/stats", tags=["Stats"])
 
 
-@router.post("/polygon/")
+@router.post(
+    "/polygon",
+    responses={
+        200: {
+            "description": "Successful",
+            "content": {"application/json": {"example": {"statistics": {...}}}},
+        },
+        422: {"description": "validation Error"},
+        429: {"description": "Rate limit per minute exceeded"},
+        500: {"description": "Internal Server Error"},
+    },
+)
 @limiter.limit(f"{POLYGON_STATISTICS_API_RATE_LIMIT}/minute")
 @version(1)
 async def get_polygon_stats(
