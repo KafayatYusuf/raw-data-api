@@ -178,7 +178,10 @@ async def update_user(
     - Dict[str, Any]: A dictionary containing the updated user information.
 
     Raises:
-    - HTTPException 404: If the user with the given osm_id is not found.
+    - HTTPException 403: If the user has unauthorized access.
+    - HTTPException 404: If the user with the given osm_id is not found
+    - HTTPException 408: If the access is denied due to request timeout
+    - HTTPException 500: If access is denied due to internal server error
     """
     auth = Users()
     return auth.update_user(osm_id, update_data)
