@@ -150,7 +150,9 @@ async def read_user(osm_id: int, user_data: AuthUser = Depends(staff_required)):
     - Dict[str, Any]: A dictionary containing user information.
 
     Raises:
-    - HTTPException 404: If the user with the given osm_id is not found.
+    - HTTPException 403: If the user has unauthorized access
+    - HTTPException 404: If the user with the given osm_id is not found
+    - HTTPException 500: If the access is denied due to internal server error
     """
     auth = Users()
 
