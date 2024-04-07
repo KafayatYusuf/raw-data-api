@@ -41,15 +41,15 @@ def get_user_from_db(osm_id: int):
 
 def get_osm_auth_user(access_token):
     """
-    Get the authenticated user from OpenStreetMap (OSM) using the provided access token.
+    Get the authenticated user from OpenStreetMap (OSM) using the provided access token
 
     Args:
-        access_token (str): The access token obtained from OSM.
+        access_token (str): The access token obtained from OSM
 
     Returns:
-        AuthUser: An AuthUser object representing the authenticated user.
-
-
+        AuthUser: An AuthUser object representing the authenticated user
+    Raises:
+        HTTPException 403: If OSM authentication fails
     """
     try:
         user = AuthUser(**osm_auth.deserialize_access_token(access_token))
