@@ -17,7 +17,7 @@ router = APIRouter(prefix="/hdx", tags=["HDX"])
 
 
 @router.post(
-    "/",
+    "",
     response_model=dict,
     status_code=200,
     responses={
@@ -50,7 +50,7 @@ async def create_hdx(
 
 
 @router.get(
-    "/",
+    "",
     response_model=List[dict],
     responses={
         200: {
@@ -97,7 +97,7 @@ async def read_hdx_list(
 
 
 @router.get(
-    "/search/",
+    "/search",
     response_model=List[dict],
     responses={
         404: {
