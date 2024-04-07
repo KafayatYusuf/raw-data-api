@@ -13,7 +13,15 @@ from .auth import AuthUser, UserRole, staff_required
 router = APIRouter(prefix="/custom", tags=["Custom Exports"])
 
 
-@router.post("/snapshot")
+@router.post(
+    "/snapshot",
+    responses={
+        200: {"description": "Successful"},
+        400: {"description": "Bad Request"},
+        422: {"description": "Validation Error"},
+        500: {"description": "Internal Server Error"},
+    },
+)
 @limiter.limit(f"{RATE_LIMIT_PER_MIN}/minute")
 @version(1)
 async def process_custom_requests(
