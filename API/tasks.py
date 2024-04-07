@@ -23,7 +23,7 @@ router = APIRouter(prefix="/tasks", tags=["Tasks"])
     "/status/{task_id}",
     response_model=SnapshotTaskResponse,
     responses={
-        200: {"description": "Successful response", "model": SnapshotTaskResponse},
+        200: {"description": "Successful", "model": SnapshotTaskResponse},
         404: {"description": "Task not found"},
     },
 )
@@ -91,7 +91,7 @@ def get_task_status(
 @router.get(
     "/revoke/{task_id}",
     responses={
-        200: {"description": "Task successfully revoked"},
+        200: {"description": "Successful"},
         404: {"description": "Task not found"},
         500: {"description": "Internal Server Error"},
     },
