@@ -202,7 +202,7 @@ def get_list_details(
         Details of items in the queue
 
     Raises:
-        HTTPException: If the specified queue is not found
+        HTTPException 404: If the specified queue is not found
     """
     if queue_name not in queues:
         raise HTTPException(status_code=404, detail=f"Queue '{queue_name}' not found")
