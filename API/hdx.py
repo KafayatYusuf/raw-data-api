@@ -9,7 +9,7 @@ from src.config import RATE_LIMIT_PER_MIN
 
 from .auth import AuthUser, admin_required, staff_required
 
-# from src.validation.models import DynamicCategoriesModel
+from src.validation.models import DynamicCategoriesModel
 from src.validation.models import ErrorMessage, common_responses
 
 
@@ -189,7 +189,7 @@ async def read_hdx(request: Request, hdx_id: int):
         404: {
             "description": "Not found",
             "content": {
-                "application/json": {"example": {"message": "Dataset not found"}}
+                "application/json": {"example": {"detail": "Dataset not found"}}
             },
         },
     },
@@ -232,7 +232,7 @@ async def update_hdx(
         404: {
             "description": "Not found",
             "content": {
-                "application/json": {"example": {"message": "Dataset not found"}}
+                "application/json": {"example": {"detail": "Dataset not found"}}
             },
         },
     },
@@ -275,7 +275,7 @@ async def patch_hdx(
         404: {
             "description": "Not found",
             "content": {
-                "application/json": {"example": {"message": "Dataset not found"}}
+                "application/json": {"example": {"detail": "Dataset not found"}}
             },
         },
     },
