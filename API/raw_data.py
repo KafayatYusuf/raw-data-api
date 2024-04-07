@@ -54,7 +54,14 @@ router = APIRouter(prefix="", tags=["Extract"])
 redis_client = redis.StrictRedis.from_url(CELERY_BROKER_URL)
 
 
-@router.get("/status/", response_model=StatusResponse)
+@router.get(
+    "/status",
+    response_model=StatusResponse,
+    responses={
+        200: {"description": "Successful"},
+        500: {"description": "Internal Server Error"},
+    },
+)
 @version(1)
 def check_database_last_updated():
     """Gives status about how recent the osm data is , it will give the last time that database was updated completely"""
@@ -62,7 +69,16 @@ def check_database_last_updated():
     return {"last_updated": result}
 
 
-@router.post("/snapshot/", response_model=SnapshotResponse)
+@router.post(
+    "/snapshot",
+    response_model=SnapshotResponse,
+    responses={
+        200: {"description": "Successful"},
+        400: {"description": "Bad Request"},
+        422: {"description": "Validation Error"},
+        500: {"description": "Internal Server Error"},
+    },
+)
 @limiter.limit(f"{export_rate_limit}/minute")
 @version(1)
 def get_osm_current_snapshot_as_file(
@@ -72,7 +88,7 @@ def get_osm_current_snapshot_as_file(
         openapi_examples={
             "normal": {
                 "summary": "Example : Extract Evertyhing in the area",
-                "description": "**Query** to Extract everything in the area , You can pass your geometry only and you will get everything on that area",
+                "description": "**Query** to Extract everything in the area. You can pass your geometry only and you will get everything on that area",
                 "value": {
                     "geometry": {
                         "type": "Polygon",
@@ -90,7 +106,7 @@ def get_osm_current_snapshot_as_file(
             },
             "fileformats": {
                 "summary": "An example with different file formats and filename",
-                "description": "Raw Data API  can export data into multiple file formats . See outputype for more details",
+                "description": "Raw Data API can export data into multiple file formats. See outputype for more details",
                 "value": {
                     "outputType": "shp",
                     "fileName": "Pokhara_all_features",
@@ -110,7 +126,7 @@ def get_osm_current_snapshot_as_file(
             },
             "filters": {
                 "summary": "An example with filters and geometry type",
-                "description": "Raw Data API  supports different kind of filters on both attributes and tags . See filters for more details",
+                "description": "Raw Data API supports different kind of filters on both attributes and tags. See filters for more details",
                 "value": {
                     "outputType": "geojson",
                     "fileName": "Pokhara_buildings",
@@ -464,14 +480,29 @@ def get_osm_current_snapshot_as_file(
     )
 
 
-@router.post("/snapshot/plain/")
+{"example": {"detail": "Successful"}}
+
+
+@router.post(
+    "/snapshot/plain",
+    responses={
+        200: {
+            "description": "Successful",
+            "content": {"example": {"detail": "Successful"}},
+        },
+        400: {"description": "Bad Request"},
+        401: {"description": "Unauthorized"},
+        422: {"description": "Validation Error"},
+        500: {"description": "Internal Server Error"},
+    },
+)
 @version(1)
 def get_osm_current_snapshot_as_plain_geojson(
     request: Request,
     params: RawDataCurrentParamsBase,
     user: AuthUser = Depends(get_optional_user),
 ):
-    """Generates the Plain geojson for the polygon within 30 Sqkm and returns the result right away
+    """Generates the plain geojson for the polygon within 30 Sqkm and returns the result right away
 
     Args:
         request (Request): _description_
@@ -496,14 +527,40 @@ def get_osm_current_snapshot_as_plain_geojson(
     return result
 
 
-@router.get("/countries/")
+@router.get(
+    "/countries",
+    responses={
+        200: {
+            "description": "Successful",
+            "content": {"application/json": {"example": {"detail": "Successful"}}},
+        },
+        400: {"description": "Bad Request"},
+        401: {"description": "Unauthorized"},
+        404: {"description": "Not Found"},
+        500: {"description": "Internal Server Error"},
+    },
+)
 @version(1)
 def get_countries(q: str = ""):
+    """Retrieves a list of countries"""
     result = RawData().get_countries_list(q)
     return result
 
 
-@router.get("/osm_id/")
+@router.get(
+    "/osm_id",
+    responses={
+        200: {
+            "description": "Successful",
+            "content": {"application/json": {"example": {"detail": "Successful"}}},
+        },
+        400: {"description": "Bad Request"},
+        401: {"description": "Unauthorized"},
+        404: {"description": "Not Found"},
+        500: {"description": "Internal Server Error"},
+    },
+)
 @version(1)
 def get_osm_feature(osm_id: int):
+    """Retrieves OSM ID"""
     return RawData().get_osm_feature(osm_id)
