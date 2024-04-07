@@ -125,7 +125,9 @@ async def create_user(params: User, user_data: AuthUser = Depends(admin_required
     - Dict[str, Any]: A dictionary containing the osm_id of the newly created user.
 
     Raises:
-    - HTTPException 400: If the user creation fails.
+    - HTTPException 400: If the user creation fails
+    - HTTPException 403: If the user has unauthorized access
+    - HTTPException 500: If the access is denied due to internal server error
     """
     auth = Users()
     return auth.create_user(params.osm_id, params.role)
