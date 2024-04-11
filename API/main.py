@@ -16,10 +16,10 @@
 # Humanitarian OpenStreetmap Team
 # 1100 13th Street NW Suite 800 Washington, D.C. 20005
 # <info@hotosm.org>
-from pip._vendor import requests
 
 
 import time
+import os
 import psycopg2
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -27,6 +27,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi_versioning import VersionedFastAPI
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
+from pip._vendor import requests
+
 
 from src.config import (
     ENABLE_CUSTOM_EXPORTS,
@@ -78,7 +80,7 @@ if LOG_LEVEL.lower() == "debug":
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 app = FastAPI(
-    title="Raw Data API ",
+    title="Raw Data API",
     summary="RAW Data API (Application Programming Interface) helps to transform and export OpenStreetMap (OSM) data in different GIS file formats.",
     swagger_ui_parameters={"syntaxHighlight": False},
 )
