@@ -81,9 +81,11 @@ if LOG_LEVEL.lower() == "debug":
 
 app = FastAPI(
     title="Raw Data API",
-    summary="RAW Data API (Application Programming Interface) helps to transform and export OpenStreetMap (OSM) data in different GIS file formats.",
+    summary="Your one-stop API which is a set of high-performant APIs (Application Programming Interfaces) for transforming and exporting OpenStreetMap (OSM) data in different GIS file formats.",
     swagger_ui_parameters={"syntaxHighlight": False},
 )
+# RAW Data API (Application Programming Interface) helps to transform and export OpenStreetMap (OSM) data in different GIS file formats.
+
 app.include_router(auth_router)
 app.include_router(raw_data_router)
 app.include_router(tasks_router)
