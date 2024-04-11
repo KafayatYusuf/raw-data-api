@@ -43,13 +43,18 @@ if ENABLE_HDX_EXPORTS:
 
 
 def to_camel(string: str) -> str:
+    """Convert string to lowercase string"""
     split_string = string.split("_")
 
     return "".join([split_string[0], *[w.capitalize() for w in split_string[1:]]])
 
 
 class BaseModel(PydanticModel):
+    """This class provides configuration options for Pydantic models"""
+
     class Config:
+        """Configuration options for Pydantic models"""
+
         alias_generator = to_camel
         populate_by_name = True
         use_enum_values = True
@@ -57,6 +62,8 @@ class BaseModel(PydanticModel):
 
 
 class RawDataOutputType(Enum):
+    """This enumeration defines constants for various output formats supported by the Raw Data API"""
+
     GEOJSON = "geojson"
     KML = "kml"
     SHAPEFILE = "shp"
@@ -71,6 +78,13 @@ class RawDataOutputType(Enum):
 
 
 class SupportedFilters(Enum):
+    """This enumeration defines constants for different types of filters supported by the Raw Data API.
+
+    Attributes:
+        TAGS (str): Filter type for tags.
+        ATTRIBUTES (str): Filter type for attributes.
+    """
+
     TAGS = "tags"
     ATTRIBUTES = "attributes"
 
@@ -81,6 +95,8 @@ class SupportedFilters(Enum):
 
 
 class SupportedGeometryFilters(Enum):
+    """This enumeration defines constants for different types of geometry filters supported by the Raw Data API"""
+
     POINT = "point"
     LINE = "line"
     POLYGON = "polygon"
@@ -93,16 +109,23 @@ class SupportedGeometryFilters(Enum):
 
 
 class JoinFilterType(Enum):
+    """This enumeration defines constants for different types of join filters
+    used in queries"""
+
     OR = "OR"
     AND = "AND"
 
 
 class SQLFilter(BaseModel):
+    """his model defines the structure of SQL filters used in queries"""
+
     join_or: Optional[Dict[str, List[str]]] = Field(default=None)
     join_and: Optional[Dict[str, List[str]]] = Field(default=None)
 
 
 class TagsFilter(BaseModel):
+    """This model defines the structure of tags filters used for different types of geometries"""
+
     point: Optional[SQLFilter] = Field(default=None)
     line: Optional[SQLFilter] = Field(default=None)
     polygon: Optional[SQLFilter] = Field(default=None)
@@ -110,6 +133,8 @@ class TagsFilter(BaseModel):
 
 
 class AttributeFilter(BaseModel):
+    """This model defines the structure of attribute filters used for different types of geometries"""
+
     point: Optional[List[str]] = Field(default=None)
     line: Optional[List[str]] = Field(default=None)
     polygon: Optional[List[str]] = Field(default=None)
@@ -117,14 +142,32 @@ class AttributeFilter(BaseModel):
 
 
 class Filters(BaseModel):
+    """This model defines the structure of filters used for querying data,including tags and attributes"""
+
     tags: Optional[TagsFilter] = Field(default=None)
     attributes: Optional[AttributeFilter] = Field(default=None)
 
 
 class GeometryValidatorMixin:
+    """This mixin class provides a validator method to validate geometries"""
+
     @validator("geometry")
     def validate_geometry(cls, value):
-        """Validates geometry"""
+        """Validates geometry
+        This method validates the input geometry. It ensures that:
+        - If the input is a Feature, its geometry type is either "Polygon" or "MultiPolygon".
+        - If the input is a FeatureCollection, all features have a geometry type of either "Polygon" or "MultiPolygon",
+          and there is only one feature in the collection.
+
+        Args:
+            value: The input geometry to validate.
+
+        Returns:
+            The validated geometry.
+
+        Raises:
+            ValueError: If the input geometry is not valid according to the specified conditions.
+        """
         if value:
             if value.type == "Feature":
                 if value.geometry.type not in ["Polygon", "MultiPolygon"]:
@@ -147,6 +190,10 @@ class GeometryValidatorMixin:
 
 
 class RawDataCurrentParamsBase(BaseModel, GeometryValidatorMixin):
+    """This model defines the structure of parameters used in the Raw Data API.
+    It includes options for specifying output type, geometry type, centroid exports, filtering criteria, and the geometry itself
+    """
+
     output_type: Optional[RawDataOutputType] = Field(
         default=RawDataOutputType.GEOJSON.value, example="geojson"
     )
@@ -202,6 +249,8 @@ class RawDataCurrentParamsBase(BaseModel, GeometryValidatorMixin):
 
 
 class RawDataCurrentParams(RawDataCurrentParamsBase):
+    """This model extends `RawDataCurrentParamsBase` and includes additional parameters to the current operation of the Raw Data API"""
+
     if ENABLE_TILES:
         min_zoom: Optional[int] = Field(
             default=None, description="Only for mbtiles"
@@ -242,10 +291,14 @@ class RawDataCurrentParams(RawDataCurrentParamsBase):
 
 
 class SnapshotResponse(BaseModel):
+    """This model defines the structure of a response returned after a snapshot request"""
+
     task_id: str
     track_link: str
 
     class Config:
+        """This class provides extra JSON schema information for generating examples for Pydantic models"""
+
         json_schema_extra = {
             "example": {
                 "task_id": "aa539af6-83d4-4aa3-879e-abf14fffa03f",
@@ -255,6 +308,8 @@ class SnapshotResponse(BaseModel):
 
 
 class SnapshotTaskResult(BaseModel):
+    """This model defines the structure of the result obtained after executing a snapshot task"""
+
     download_url: str
     file_name: str
     response_time: str
@@ -264,11 +319,15 @@ class SnapshotTaskResult(BaseModel):
 
 
 class SnapshotTaskResponse(BaseModel):
+    """This model defines the structure of the result obtained after executing a snapshot task"""
+
     id: str
     status: str
     result: SnapshotTaskResult
 
     class Config:
+        """This class provides extra JSON schema information for generating examples for Pydantic models for `SnapshotTaskResponse`"""
+
         json_schema_extra = {
             "example": {
                 "id": "3fded368-456f-4ef4-a1b8-c099a7f77ca4",
@@ -286,13 +345,19 @@ class SnapshotTaskResponse(BaseModel):
 
 
 class StatusResponse(BaseModel):
+    """This model defines the structure of a response returned with status information"""
+
     last_updated: str
 
     class Config:
+        """This class provides extra JSON schema information for generating examples"""
+
         json_schema_extra = {"example": {"lastUpdated": "2022-06-27 19:59:24+05:45"}}
 
 
 class StatsRequestParams(BaseModel, GeometryValidatorMixin):
+    """This model defines the structure of parameters used in a statistics request, including the ISO3 country code and geometry data"""
+
     iso3: Optional[str] = Field(
         default=None,
         description="ISO3 Country Code.",
@@ -300,22 +365,22 @@ class StatsRequestParams(BaseModel, GeometryValidatorMixin):
         max_length=3,
         example="NPL",
     )
-    geometry: Optional[
-        Union[Polygon, MultiPolygon, Feature, FeatureCollection]
-    ] = Field(
-        default=None,
-        example={
-            "type": "Polygon",
-            "coordinates": [
-                [
-                    [83.96919250488281, 28.194446860487773],
-                    [83.99751663208006, 28.194446860487773],
-                    [83.99751663208006, 28.214869548073377],
-                    [83.96919250488281, 28.214869548073377],
-                    [83.96919250488281, 28.194446860487773],
-                ]
-            ],
-        },
+    geometry: Optional[Union[Polygon, MultiPolygon, Feature, FeatureCollection]] = (
+        Field(
+            default=None,
+            example={
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [83.96919250488281, 28.194446860487773],
+                        [83.99751663208006, 28.194446860487773],
+                        [83.99751663208006, 28.214869548073377],
+                        [83.96919250488281, 28.214869548073377],
+                        [83.96919250488281, 28.194446860487773],
+                    ]
+                ],
+            },
+        )
     )
 
     @validator("geometry", pre=True, always=True)
@@ -612,22 +677,22 @@ class DynamicCategoriesModel(BaseModel, GeometryValidatorMixin):
             }
         ],
     )
-    geometry: Optional[
-        Union[Polygon, MultiPolygon, Feature, FeatureCollection]
-    ] = Field(
-        default=None,
-        example={
-            "type": "Polygon",
-            "coordinates": [
-                [
-                    [83.96919250488281, 28.194446860487773],
-                    [83.99751663208006, 28.194446860487773],
-                    [83.99751663208006, 28.214869548073377],
-                    [83.96919250488281, 28.214869548073377],
-                    [83.96919250488281, 28.194446860487773],
-                ]
-            ],
-        },
+    geometry: Optional[Union[Polygon, MultiPolygon, Feature, FeatureCollection]] = (
+        Field(
+            default=None,
+            example={
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [83.96919250488281, 28.194446860487773],
+                        [83.99751663208006, 28.194446860487773],
+                        [83.99751663208006, 28.214869548073377],
+                        [83.96919250488281, 28.214869548073377],
+                        [83.96919250488281, 28.194446860487773],
+                    ]
+                ],
+            },
+        )
     )
 
     @validator("geometry", pre=True, always=True)
