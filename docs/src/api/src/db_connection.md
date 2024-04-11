@@ -58,7 +58,7 @@ def release_conn_from_pool(
     pool_con
 )
 ```
-Can be used to release specific connection after its use from the pool , so that it can be used by another process
+Can be used to release specific connection after its use from the pool, so that it can be used by another process
 
 Args:
     pool_con (_type_): define which connection to remove from pool
