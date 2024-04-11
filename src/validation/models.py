@@ -293,16 +293,16 @@ class RawDataCurrentParams(RawDataCurrentParamsBase):
 class SnapshotResponse(BaseModel):
     """This model defines the structure of a response returned after a snapshot request"""
 
-    task_id: str
-    track_link: str
+    taskId: str
+    trackLink: str
 
     class Config:
         """This class provides extra JSON schema information for generating examples for Pydantic models"""
 
         json_schema_extra = {
             "example": {
-                "task_id": "aa539af6-83d4-4aa3-879e-abf14fffa03f",
-                "track_link": "/tasks/status/aa539af6-83d4-4aa3-879e-abf14fffa03f/",
+                "taskId": "aa539af6-83d4-4aa3-879e-abf14fffa03f",
+                "trackLink": "/tasks/status/aa539af6-83d4-4aa3-879e-abf14fffa03f/",
             }
         }
 
