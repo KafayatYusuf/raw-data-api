@@ -18,18 +18,6 @@
 # <info@hotosm.org>
 from pip._vendor import requests
 
-welcome_msg = (
-    welcome_msg
-) = """Welcome to the HOTOSM raw data API!
-Your one-stop API which is a set of high-performant APIs (Application Programming Interfaces) for transforming and exporting OpenStreetMap (OSM) data in different GIS file formats."""
-print(welcome_msg)
-
-
-class ConsoleColors:
-    BOLD = "\033[1m"
-    RESET = "\033[0m"
-    GREEN = "\033[92m"
-
 
 import time
 import psycopg2
@@ -128,6 +116,19 @@ app.state.limiter = LIMITER
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 origins = ["*"]
+
+
+class ConsoleColors:
+    BOLD = "\033[1m"
+    RESET = "\033[0m"
+    GREEN = "\033[92m"
+
+
+welcome_msg = (
+    f"{COLOR_GREEN}Welcome to the HOTOSM raw data API!\n"
+    f"{COLOR_BOLD}Your one-stop API which is a set of high-performant APIs (Application Programming Interfaces) for transforming and exporting OpenStreetMap (OSM) data in different GIS file formats.{COLOR_RESET}"
+)
+print(welcome_msg)
 
 
 @app.middleware("http")
