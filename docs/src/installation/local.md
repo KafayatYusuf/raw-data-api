@@ -58,9 +58,9 @@ uvicorn API.main:app --reload
 
 ### Queues 
 
-Currently there are two type of queue implemented : 
-- "raw_daemon" : Queue for default exports which will create each unique id for exports  , This queue is attached to 24/7 available workers 
-- "raw_ondemand" : Queue for recurring exports which will replace the previous exports if present on the system , can be enabled through uuid:false API Param . This queue will be attached to worker which will only spin up upon request. 
+Currently, there are two types of queue implemented: 
+- "raw_daemon" : Queue for default exports which will create each unique id for exports, this queue is attached to 24/7 available workers 
+- "raw_ondemand" : Queue for recurring exports which will replace the previous exports if present on the system can be enabled through uuid:false API Param. This queue will be attached to worker which will only spin up upon request. 
 
 ### Start Celery Worker
 
@@ -75,7 +75,7 @@ You should be able to start [celery](https://docs.celeryq.dev/en/stable/getting-
   celery --app API.api_worker worker --loglevel=INFO --queues="raw_ondemand" -n 'ondemand_worker'
   ```
 
-Set no of request that a worker can take at a time by using --concurrency 
+Set no of request that a worker can take at a time by using -- concurrency 
 
 #### Note
 `If you are using postgres database as result_backend for celery you need to install sqlalchemy`

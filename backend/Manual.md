@@ -1,6 +1,6 @@
 ## Initialize Rawdata Loading
 
-Prepare your osm.pbf for loading before start. You can download it from different sources such as Geofabrik , Planet.
+Prepare your osm.pbf for loading before start. You can download it from different sources such as Geofabrik, Planet.
 
 - Install [osm2pgsql v1.6.0](https://github.com/openstreetmap/osm2pgsql/releases/tag/1.6.0)
 - Download and clone underpass
@@ -10,7 +10,7 @@ Prepare your osm.pbf for loading before start. You can download it from differen
 
 >    <font size="2">
 
-     You can Export following system variables in order to avoid passing db configuration time to time ( Optional )
+     You can xxport following system variables in order to avoid passing db configuration time to time ( Optional )
 
      PGHOST behaves the same as the host connection parameter.
      PGHOSTADDR behaves the same as the hostaddr connection parameter. This can be set instead of or in addition to PGHOST to avoid DNS lookup overhead.
@@ -33,7 +33,7 @@ export PGDATABASE=postgres
 
 `osm2pgsql --create -H localhost -U admin -P 5432 -d postgres -W --extra-attributes --slim --output=flex --style ./raw.lua yourdownloaded.osm.pbf `
 
-with exported DB Param :
+with exported DB Param:
 
 `osm2pgsql --create --extra-attributes --slim --output=flex --style ./raw.lua yourdownloaded.osm.pbf `
 
@@ -69,26 +69,26 @@ port=
 
 ```
 
-- **Create Basic Indexes** :
+- **Create Basic Indexes**:
 
   ```
   psql -h localhost -U admin -d postgres -a -f sql/pre_indexes.sql
   ```
 
-- **Create Grid Table** :
+- **Create Grid Table**:
 
   ```
   psql -h localhost -U admin -d postgres -a -f sql/grid.sql
   ```
 
-- **Create Country Table** :
+- **Create Country Table**:
 
   ```
   psql -h localhost -U admin -d postgres -a -f sql/countries.sql
   ```
 
-- **Apply Grid Update Script** :
-  There is grid_update script , Which is responsible for the Grid Column update on the tables which will be null intially when you import
+- **Apply Grid Update Script**:
+  There is grid_update script, which is responsible for the Grid Column update on the tables which will be null intially when you import
 
   **Run Script**
 
@@ -117,7 +117,7 @@ port=
 
 ## Initialize Update Script
 
-Now run init , This will create replication status table in db
+Now run init, this will create replication status table in db
 
 > Export database password or keep it inside systemd service or pass W after command -- -W
 
@@ -131,7 +131,7 @@ Now Run update with lua script file location : _-s_ parameter like this (Conside
 python replication update -s raw.lua --max-diff-size 10
 ```
 
-with force password prompt (Only if you wish to supply pass from command) :
+with force password prompt (Only if you wish to supply pass from command):
 
 ```
 python replication update -s raw.lua -- -W
@@ -141,4 +141,4 @@ Read more documentation [here](https://osm2pgsql.org/doc/manual.html#advanced-to
 
 ## Configure Per Minute Replication
 
-There are multiple options to run this python script per minute , You can either setup a cronjob or setup a systemd service
+There are multiple options to run this python script per minute, you can either setup a cronjob or setup a systemd service

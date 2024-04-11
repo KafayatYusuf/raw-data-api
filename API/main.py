@@ -16,8 +16,10 @@
 # Humanitarian OpenStreetmap Team
 # 1100 13th Street NW Suite 800 Washington, D.C. 20005
 # <info@hotosm.org>
-import time
 
+
+import time
+import os
 import psycopg2
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -25,6 +27,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi_versioning import VersionedFastAPI
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
+from pip._vendor import requests
+
 
 from src.config import (
     ENABLE_CUSTOM_EXPORTS,
@@ -75,7 +79,13 @@ if LOG_LEVEL.lower() == "debug":
 
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
-app = FastAPI(title="Raw Data API ", swagger_ui_parameters={"syntaxHighlight": False})
+app = FastAPI(
+    title="Raw Data API",
+    summary="Your one-stop API which is a set of high-performant APIs (Application Programming Interfaces) for transforming and exporting OpenStreetMap (OSM) data in different GIS file formats.",
+    swagger_ui_parameters={"syntaxHighlight": False},
+)
+# RAW Data API (Application Programming Interface) helps to transform and export OpenStreetMap (OSM) data in different GIS file formats.
+
 app.include_router(auth_router)
 app.include_router(raw_data_router)
 app.include_router(tasks_router)
@@ -110,6 +120,19 @@ app.state.limiter = LIMITER
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 origins = ["*"]
+
+
+class ConsoleColors:
+    BOLD = "\033[1m"
+    RESET = "\033[0m"
+    GREEN = "\033[92m"
+
+
+welcome_msg = (
+    f"{COLOR_GREEN}Welcome to the HOTOSM raw data API!\n"
+    f"{COLOR_BOLD}Your one-stop API which is a set of high-performant APIs (Application Programming Interfaces) for transforming and exporting OpenStreetMap (OSM) data in different GIS file formats.{COLOR_RESET}"
+)
+print(welcome_msg)
 
 
 @app.middleware("http")

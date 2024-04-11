@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.2",
     "info": {
-        "title": "Raw Data API ",
+        "title": "Raw Data API",
         "version": "1"
     },
     "servers": [
@@ -82,7 +82,7 @@
                                 },
                                 "fileformats": {
                                     "summary": "An example with different file formats and filename",
-                                    "description": "Raw Data API  can export data into multiple file formats . See outputype for more details",
+                                    "description": "Raw Data API can export data into multiple file formats. See output type for more details",
                                     "value": {
                                         "outputType": "shp",
                                         "fileName": "Pokhara_all_features",
@@ -117,7 +117,7 @@
                                 },
                                 "filters": {
                                     "summary": "An example with filters and geometry type",
-                                    "description": "Raw Data API  supports different kind of filters on both attributes and tags . See filters for more details",
+                                    "description": "Raw Data API supports different kind of filters on both attributes and tags. See filters for more details",
                                     "value": {
                                         "outputType": "geojson",
                                         "fileName": "Pokhara_buildings",
@@ -168,7 +168,7 @@
                                 },
                                 "filters2": {
                                     "summary": "An example with more filters",
-                                    "description": "Raw Data API  supports different kind of filters on both attributes and tags . See filters for more details",
+                                    "description": "Raw Data API supports different kind of filters on both attributes and tags. See filters for more details",
                                     "value": {
                                         "geometry": {
                                             "type": "Polygon",
@@ -226,7 +226,7 @@
                                 },
                                 "allfilters": {
                                     "summary": "An example with multiple level of filters",
-                                    "description": "Raw Data API  supports multiple level of filters on point line polygon . See filters for more details",
+                                    "description": "Raw Data API supports multiple level of filters on point line polygon. See filters for more details",
                                     "value": {
                                         "fileName": "Example export with all features",
                                         "geometry": {
@@ -1285,8 +1285,8 @@
                 },
                 "additionalProperties": false,
                 "example": {
-                    "task_id": "aa539af6-83d4-4aa3-879e-abf14fffa03f",
-                    "track_link": "/tasks/status/aa539af6-83d4-4aa3-879e-abf14fffa03f/"
+                    "taskId": "aa539af6-83d4-4aa3-879e-abf14fffa03f",
+                    "trackLink": "/tasks/status/aa539af6-83d4-4aa3-879e-abf14fffa03f/"
                 }
             },
             "SnapshotTaskResponse": {
@@ -1299,11 +1299,11 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "title": "Id",
+                        "title": "id",
                         "type": "string"
                     },
                     "status": {
-                        "title": "Status",
+                        "title": "status",
                         "type": "string"
                     },
                     "result": {
@@ -1327,37 +1327,37 @@
             "SnapshotTaskResult": {
                 "title": "SnapshotTaskResult",
                 "required": [
-                    "downloadUrl",
-                    "fileName",
-                    "responseTime",
-                    "queryArea",
-                    "bindedFileSize",
-                    "zipFileSizeBytes"
+                    "download_url",
+                    "file_name",
+                    "response_time",
+                    "query_area",
+                    "binded_file_size",
+                    "zip_file_size_bytes"
                 ],
                 "type": "object",
                 "properties": {
-                    "downloadUrl": {
-                        "title": "Downloadurl",
+                    "download_url": {
+                        "title": "download_url",
                         "type": "string"
                     },
-                    "fileName": {
-                        "title": "Filename",
+                    "file_name": {
+                        "title": "file_name",
                         "type": "string"
                     },
-                    "responseTime": {
-                        "title": "Responsetime",
+                    "response_time": {
+                        "title": "response_time",
                         "type": "string"
                     },
-                    "queryArea": {
-                        "title": "Queryarea",
+                    "query_area": {
+                        "title": "query_area",
                         "type": "string"
                     },
-                    "bindedFileSize": {
-                        "title": "Bindedfilesize",
+                    "binded_file_fize": {
+                        "title": "binded_file_size",
                         "type": "string"
                     },
-                    "zipFileSizeBytes": {
-                        "title": "Zipfilesizebytes",
+                    "zip_file_size_bytes": {
+                        "title": "zip_file_size_bytes",
                         "type": "integer"
                     }
                 },

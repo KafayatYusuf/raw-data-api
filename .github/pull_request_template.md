@@ -9,29 +9,29 @@
 - [ ] 🤖 Build or CI
 - [ ] ❓ Other (please specify)
 
-## Related Issue :
+## Related Issue:
 
 - Resolve #123example
 
-## What does this PR do ?
+## What does this PR do?
 
 A brief description of how this solves the issue.
 
-## Consideration : 
+## Consideration: 
 
 Are there any alternatives considered / tried out during development for solution ? Any specific decision made ? if Yes , explain 
 
-## How to test ? 
+## How to test? 
 
 Notes for the reviewer. How to test this change?
 
-## Screenshots :
+## Screenshots:
 
 Please provide screenshots of the change.
 
 ## Checklists:
 
-Checklist before requesting review : 
+Checklist before requesting review: 
 
 - 📖 Read the HOT Code of Conduct: <https://docs.hotosm.org/code-of-conduct>
 - 👷‍♀️ Create small PRs. In most cases, this will be possible.
